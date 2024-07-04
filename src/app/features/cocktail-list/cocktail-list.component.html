@@ -1,0 +1,39 @@
+<h1 class="text-center text-secondary p-4 text-uppercase">Cocktail List</h1>
+
+<div class="container">
+
+  <div class="row col-12 mb-3 ps-2 pe-4">
+    <div class="card p-0">
+      <div class="border-1 p-2 border-bottom border-secondary-subtle bg-secondary-subtle fw-bold">
+        Filter
+      </div>
+
+      <div class="align-items-center card-body">
+        <div class="row col-12">
+          <div class="col-6 d-flex flex-fill">
+            <label class="form-label flex-grow-1">Cocktail Name:</label>
+            <input class="form-control flex-shrink-1" (keyup)="onKeyPress($event)" placeholder="Search..." type="text" />
+          </div>
+          <div class="col-6 d-flex align-items-center">
+            <label>Show Only Favorites</label>
+            <input type="checkbox" (change)="onCheckedChanged($event)" value="" />
+          </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row col-12">
+    @for(item of cocktails$ | async; track item) {
+      <div class="col-6 mb-5">
+        <app-list-card [cocktail]="item" [searchText]="(searchString$ | async) || ''" ></app-list-card>
+      </div>
+    } @empty {
+      <div class="d-flex justify-content-center flex-fill">
+        <div class="bg-warning p-3 rounded-2">
+          Sorry no data found
+        </div>
+    </div>
+    }
+  </div>
+</div>

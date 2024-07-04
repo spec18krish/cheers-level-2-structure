@@ -32,9 +32,11 @@
             ],
             "styles": [
               "src/styles.scss",
-              "node_modules/mini.css/dist/mini-nord.min.css"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
-            "scripts": []
+            "scripts": [
+
+            ]
           },
           "configurations": {
             "production": {
@@ -99,5 +101,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
