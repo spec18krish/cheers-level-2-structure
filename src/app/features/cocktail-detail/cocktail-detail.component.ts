@@ -1,12 +1,11 @@
-import { Component, OnInit, Signal, inject, input } from '@angular/core';
-import { Cocktail } from '../../core/models/coktail.interface';
-import { CocktailDetails } from '../../core/models/cocktail-details.interface';
 import { CommonModule, Location } from '@angular/common';
-import { CocktailService } from '../../core/services/cocktail.service';
+import { Component, OnInit, inject, input } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, map, take } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
-import { IsAlcoholicDirective } from '../../shared/directives/is-alcoholic.directive';
+import { Cocktail } from '../../core/models/coktail.interface';
+import { CocktailService } from '../../core/services/cocktail.service';
 import { FavoriteService } from '../../core/services/favorite.service';
+import { IsAlcoholicDirective } from '../../shared/directives/is-alcoholic.directive';
 
 
 @Component({
@@ -23,10 +22,11 @@ export class CocktailDetailComponent implements OnInit {
   private _activateRoute = inject(ActivatedRoute);
   private _favoritesService = inject(FavoriteService);
   private _locationService = inject(Location);
+  private _router = inject(Router);
   public cocktailDetail$!: Observable<Cocktail>;
 
   ngOnInit(): void {
-    const cocktailId =  Number(this._activateRoute.snapshot.paramMap.get('id') || 0);
+    const cocktailId =  Number(this._activateRoute.snapshot.paramMap.get('id'));
     this.loadCocktailDetails(cocktailId);
   }
 

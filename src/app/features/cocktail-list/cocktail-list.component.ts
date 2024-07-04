@@ -1,13 +1,12 @@
-import { Component, DestroyRef, OnInit, Signal, computed, effect, inject, model, signal } from '@angular/core';
-import { ListCardComponent } from '../../shared/components/list-card/list-card.component';
-import { CocktailService } from '../../core/services/cocktail.service';
-import { Cocktail } from '../../core/models/coktail.interface';
-import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { BehaviorSubject, Observable, combineLatest, map, mergeMap, switchMap, take, withLatestFrom } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { CocktailDetails } from '../../core/models/cocktail-details.interface';
-import { FavoriteService } from '../../core/services/favorite.service';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
+import { BehaviorSubject, Observable, combineLatest, map, switchMap } from 'rxjs';
+import { Cocktail } from '../../core/models/coktail.interface';
+import { CocktailService } from '../../core/services/cocktail.service';
+import { FavoriteService } from '../../core/services/favorite.service';
+import { ListCardComponent } from '../../shared/components/list-card/list-card.component';
 
 
 
@@ -25,6 +24,7 @@ export class CocktailListComponent implements OnInit {
   private _showOnlyFavorites$  = new BehaviorSubject<boolean>(false);
   public searchString$ = new BehaviorSubject<string>('');
   public cocktails$: Observable<Cocktail[]>;
+
 
 
   public ngOnInit(): void {
@@ -48,6 +48,8 @@ export class CocktailListComponent implements OnInit {
   public onKeyPress(event: KeyboardEvent) {
     if (event.target) {
       const inputElem = event.target as HTMLInputElement;
+      const searchText = inputElem?.value?.trim();
+      if (searchText)
       this.searchString$.next(inputElem.value);
     }
   }

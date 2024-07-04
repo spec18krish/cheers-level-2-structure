@@ -1,10 +1,9 @@
 import { Component, EventEmitter, Output, input } from '@angular/core';
-import { Cocktail } from '../../../core/models/coktail.interface';
 import { RouterLink } from '@angular/router';
-import { CocktailDetails } from '../../../core/models/cocktail-details.interface';
+import { Cocktail } from '../../../core/models/coktail.interface';
 import { IsAlcoholicDirective } from '../../directives/is-alcoholic.directive';
-import { JoinStringPipe } from '../../pipes/join-string.pipe';
 import { HighlightPipe } from '../../pipes/highlight.pipe';
+import { JoinStringPipe } from '../../pipes/join-string.pipe';
 
 @Component({
   selector: 'app-list-card',

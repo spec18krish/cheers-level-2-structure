@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
+import { Observable, map } from 'rxjs';
 import { Cocktail } from '../models/coktail.interface';
 import { CocktailService } from './cocktail.service';
-import { Observable, combineLatest, from, map, switchMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',

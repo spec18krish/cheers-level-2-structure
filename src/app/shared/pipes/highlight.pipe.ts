@@ -14,7 +14,8 @@ export class HighlightPipe implements PipeTransform {
       return value;
     }
     const re = new RegExp(`(${search})`, 'gi');
-    const replacedValue = value.replace(re, '<span class="rounded-3" style="background-color: #fdea23;">$1</span>');
+    const highliter = `<span class="rounded-3 search-highligher">$1</span>`;
+    const replacedValue = value.replace(re, highliter);
     return this.sanitizer.bypassSecurityTrustHtml(replacedValue);
   }
 

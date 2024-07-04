@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input, OnChanges, Renderer2, SimpleChanges, effect, input } from '@angular/core';
+import { Directive, ElementRef, Renderer2, effect, input } from '@angular/core';
 
 
 @Directive({
