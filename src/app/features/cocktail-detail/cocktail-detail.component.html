@@ -16,34 +16,33 @@
        <img class="cocktail-detail-img img img-fluid img-thumbnail border-1 border-secondary-subtle" [src]="cocktailDetail.imageUrl" [alt]="cocktailDetail.name" />
     </div>
     <div class="d-flex flex-column gap-3">
-
-      <div class="d-flex gap-5">
-        <span class="fs-4 fw-semibold">{{cocktailDetail.name}}</span>
-        <span [id]="'star-'+ cocktailDetail.id" (click)="onFavoritesClick(+cocktailDetail.id)" class="icon-star me-2 mt-2 cursor-pointer" [class]="{'active': cocktailDetail.isFavorite}" ></span>
-      </div>
-
-
-      <div class="d-flex gap-3">
-        <span class="fw-semibold">Type:</span>
-        <span class="ms-5 ps-3 pe-3 pt-1 pb-1 rounded-2" [appIsAlcoholic]="cocktailDetail.isAlcoholic"></span>
-      </div>
-
-      <div class="d-flex">
-        <div class="align-self-center">
-          <span class="fw-semibold">Ingredients:</span>
+        <div class="d-flex gap-5">
+          <span class="fs-4 fw-semibold">{{cocktailDetail.name}}</span>
+          <span [id]="'star-'+ cocktailDetail.id" (click)="onFavoritesClick(+cocktailDetail.id)" class="icon-star me-2 mt-2 cursor-pointer" [class]="{'active': cocktailDetail.isFavorite}" ></span>
         </div>
 
-        <div>
-           <ul>
-             <li *ngFor="let ingredient of cocktailDetail.ingredients">{{ingredient}}</li>
-           </ul>
-        </div>
-      </div>
 
-      <div class="d-flex justify-content-between gap-3">
-        <span class="fw-semibold">Instructions:</span>
-        <span>{{cocktailDetail.instructions}}</span>
-      </div>
+        <div class="d-flex gap-3">
+          <span class="fw-semibold">Type:</span>
+          <span class="ms-5 ps-3 pe-3 pt-1 pb-1 rounded-2" [appIsAlcoholic]="cocktailDetail.isAlcoholic"></span>
+        </div>
+
+        <div class="d-flex">
+          <div class="align-self-center">
+            <span class="fw-semibold">Ingredients:</span>
+          </div>
+
+          <div>
+            <ul>
+              <li *ngFor="let ingredient of cocktailDetail.ingredients">{{ingredient}}</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between gap-3">
+          <span class="fw-semibold">Instructions:</span>
+          <span>{{cocktailDetail.instructions}}</span>
+        </div>
     </div>
   </div>
 </div>

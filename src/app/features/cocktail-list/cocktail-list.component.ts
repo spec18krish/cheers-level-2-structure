@@ -1,19 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormsModule } from '@angular/forms';
-import { BehaviorSubject, Observable, combineLatest, map, switchMap } from 'rxjs';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Observable, combineLatest, map, startWith, switchMap } from 'rxjs';
 import { Cocktail } from '../../core/models/coktail.interface';
 import { CocktailService } from '../../core/services/cocktail.service';
 import { FavoriteService } from '../../core/services/favorite.service';
 import { ListCardComponent } from '../../shared/components/list-card/list-card.component';
 
-
-
 @Component({
   selector: 'app-cocktail-list',
   standalone: true,
-  imports: [CommonModule, ListCardComponent, FormsModule],
+  imports: [CommonModule, ListCardComponent, FormsModule, ReactiveFormsModule],
   templateUrl: './cocktail-list.component.html',
   styleUrl: './cocktail-list.component.scss',
 })
@@ -21,14 +19,20 @@ export class CocktailListComponent implements OnInit {
   private _cocktailService = inject(CocktailService);
   private _favoritesService = inject(FavoriteService);
   private _destroyRef = inject(DestroyRef);
-  private _showOnlyFavorites$  = new BehaviorSubject<boolean>(false);
-  public searchString$ = new BehaviorSubject<string>('');
   public cocktails$: Observable<Cocktail[]>;
+  public filterFormGroup: FormGroup;
+  public searchString$: Observable<string>;
+  public showOnlyFavourites$: Observable<boolean>;
 
-
+  public searchControl: FormControl = new FormControl('');
+  public showOnlyFavouritesControl: FormControl = new FormControl(false);
 
   public ngOnInit(): void {
-    this.cocktails$ = combineLatest([this._showOnlyFavorites$, this.searchString$]).pipe(
+    this.setInitialValue();
+    this.cocktails$ = combineLatest([
+      this.showOnlyFavourites$,
+      this.searchString$
+    ]).pipe(
       switchMap(([showOnlyFavorites, search]) => {
         return this._cocktailService.getCocktailsByName(search).pipe(
           map((cocktails) => {
@@ -42,23 +46,17 @@ export class CocktailListComponent implements OnInit {
         )
       }),
       takeUntilDestroyed(this._destroyRef)
-    )
+    );
   }
 
-  public onKeyPress(event: KeyboardEvent) {
-    if (event.target) {
-      const inputElem = event.target as HTMLInputElement;
-      const searchText = inputElem?.value?.trim();
-      if (searchText)
-      this.searchString$.next(inputElem.value);
-    }
-  }
+  private setInitialValue(): void {
+    this.searchString$ = this.searchControl.valueChanges.pipe(
+      startWith(this.searchControl.value)
+     );
 
-  public onCheckedChanged(event: Event): void {
-    if (event.target) {
-      const selectedVal = (event.target as HTMLInputElement).checked;
-      this._showOnlyFavorites$.next(selectedVal);
-    }
+     this.showOnlyFavourites$ = this.showOnlyFavouritesControl.valueChanges.pipe(
+       startWith(this.showOnlyFavouritesControl.value)
+     );
   }
 }
 
