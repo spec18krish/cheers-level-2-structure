@@ -7,6 +7,7 @@ import { Cocktail } from '../../core/models/coktail.interface';
 import { CocktailService } from '../../core/services/cocktail.service';
 import { FavoriteService } from '../../core/services/favorite.service';
 import { ListCardComponent } from '../../shared/components/list-card/list-card.component';
+import { SortType } from './cocktail-list-sort';
 
 @Component({
   selector: 'app-cocktail-list',
@@ -23,25 +24,34 @@ export class CocktailListComponent implements OnInit {
   public filterFormGroup: FormGroup;
   public searchString$: Observable<string>;
   public showOnlyFavourites$: Observable<boolean>;
+  public sort$: Observable<SortType>;
 
   public searchControl: FormControl = new FormControl('');
   public showOnlyFavouritesControl: FormControl = new FormControl(false);
+  public sort: FormControl = new FormControl('default');
 
   public ngOnInit(): void {
-    this.setInitialValue();
+    this.initializeFormControls();
     this.cocktails$ = combineLatest([
       this.showOnlyFavourites$,
-      this.searchString$
+      this.searchString$,
+      this.sort$
     ]).pipe(
-      switchMap(([showOnlyFavorites, search]) => {
+      switchMap(([showOnlyFavorites, search, sort]) => {
         return this._cocktailService.getCocktailsByName(search).pipe(
           map((cocktails) => {
+            cocktails = this.sortCocktailList(cocktails, sort);
             const favoritesIds = this._favoritesService.getFavoriteIds();
             const mappedCocktails = cocktails.map((cocktail) => ({
               ...cocktail,
               isFavorite: favoritesIds.includes(+cocktail.id)
             }));
-            return showOnlyFavorites ?  mappedCocktails.filter(f => f.isFavorite) : mappedCocktails;
+
+            // filtering based on favourites or not
+            const filteredCocktails = showOnlyFavorites ?  mappedCocktails.filter(f => f.isFavorite) : mappedCocktails;
+
+            // Sorting
+            return this.sortCocktailList(filteredCocktails, sort);
           })
         )
       }),
@@ -49,7 +59,7 @@ export class CocktailListComponent implements OnInit {
     );
   }
 
-  private setInitialValue(): void {
+  private initializeFormControls(): void {
     this.searchString$ = this.searchControl.valueChanges.pipe(
       startWith(this.searchControl.value)
      );
@@ -57,6 +67,22 @@ export class CocktailListComponent implements OnInit {
      this.showOnlyFavourites$ = this.showOnlyFavouritesControl.valueChanges.pipe(
        startWith(this.showOnlyFavouritesControl.value)
      );
+
+     this.sort$ = this.sort.valueChanges.pipe(
+      startWith(this.sort.value)
+    );
+  }
+
+  private sortCocktailList(cocktails: Cocktail[], sortType: SortType): Cocktail[]{
+    if (sortType === 'a-z') {
+      return cocktails.sort((a, b) => a.name.localeCompare(b.name));
+    }
+    else if (sortType === 'z-a') {
+      return cocktails.sort((a, b) => b.name.localeCompare(a.name));
+    }
+    else {
+      return cocktails;
+    }
   }
 }
 
