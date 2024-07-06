@@ -1,14 +1,14 @@
-
 <div class="d-flex rounded border-1 gap-4 border border-2 border-secondary-subtle rounded-2">
   <div>
-   <img class="img img-fluid img-thumbnail rounded-2 border-2 border-secondary-subtle cocktail-img" [src]="cocktail().imageUrl" />
+    <img class="img img-fluid img-thumbnail rounded-2 border-2 border-secondary-subtle cocktail-img"
+      [src]="cocktail().imageUrl" />
   </div>
 
   <div class="d-flex gap-5 justify-content-between flex-fill">
     <div class="d-flex flex-column align-items-start">
 
       <a class="text-decoration-none text-info mb-1" [routerLink]="['detail', cocktail().id]">
-        <span class="fs-4 mb-2" [innerHTML]="cocktail().name | highlight:searchText()" ></span>
+        <span class="fs-4 mb-2" [innerHTML]="cocktail().name | highlight:searchText()"></span>
       </a>
 
       <span class="ps-2 pe-2 pt-1 pb-1 rounded-3" [appIsAlcoholic]="cocktail().isAlcoholic"></span>
@@ -16,7 +16,8 @@
 
     </div>
     <div class="align-self-start justify-content-end">
-      <span [id]="'star-'+ cocktail().id" (click)="onFavoritesClick(+cocktail().id)" class="icon-star me-2 mt-2" [class]="{'active': cocktail().isFavorite}" ></span>
+      <span [id]="'star-'+ cocktail().id" (click)="onFavoritesClick(+cocktail().id)" class="icon-star me-2 mt-2"
+        [class]="{'active': cocktail().isFavorite}"></span>
     </div>
   </div>
 </div>

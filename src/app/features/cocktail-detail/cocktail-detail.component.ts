@@ -1,5 +1,5 @@
 import { CommonModule, Location } from '@angular/common';
-import { Component, OnInit, inject, input } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, catchError, map, of, take } from 'rxjs';
 import { Cocktail } from '../../core/models/coktail.interface';
@@ -19,6 +19,7 @@ export class CocktailDetailComponent implements OnInit {
   private _activateRoute = inject(ActivatedRoute);
   private _favoritesService = inject(FavoriteService);
   private _locationService = inject(Location);
+
   public cocktailDetail$!: Observable<Cocktail | null>;
   public errorMessage: string = '';
 

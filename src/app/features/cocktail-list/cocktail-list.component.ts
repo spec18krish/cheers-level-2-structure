@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BehaviorSubject, Observable, Subject, catchError, combineLatest, map, of, startWith, switchMap } from 'rxjs';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { BehaviorSubject, Observable, catchError, combineLatest, map, of, startWith, switchMap } from 'rxjs';
 import { Cocktail } from '../../core/models/coktail.interface';
 import { CocktailService } from '../../core/services/cocktail.service';
 import { FavoriteService } from '../../core/services/favorite.service';
@@ -26,9 +26,6 @@ export class CocktailListComponent implements OnInit {
   public searchString$: Observable<string>;
   public showOnlyFavourites$: Observable<boolean>;
   public sort$: Observable<SortType>;
-  public searchControl: FormControl = new FormControl('');
-  public showOnlyFavouritesControl: FormControl = new FormControl(false);
-  public sortControl: FormControl = new FormControl('default');
   public _refresh$ = new BehaviorSubject<boolean>(false);
   public errorMessage: string | null = null;
 
