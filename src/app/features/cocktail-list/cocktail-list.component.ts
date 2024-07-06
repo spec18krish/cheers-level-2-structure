@@ -29,7 +29,7 @@ export class CocktailListComponent implements OnInit {
   public searchControl: FormControl = new FormControl('');
   public showOnlyFavouritesControl: FormControl = new FormControl(false);
   public sortControl: FormControl = new FormControl('default');
-  public _loadCocktails$ = new BehaviorSubject<boolean>(false);
+  public _refresh$ = new BehaviorSubject<boolean>(false);
   public errorMessage: string | null = null;
 
   public ngOnInit(): void {
@@ -37,7 +37,7 @@ export class CocktailListComponent implements OnInit {
 
     this.cocktails$ = combineLatest([
       this.filterFormGroup.valueChanges.pipe(startWith(this.filterFormGroup.value)),
-      this._loadCocktails$
+      this._refresh$
     ]).pipe(
       switchMap(([formValues, _]) => {
         const { search, showOnlyFavourites, sort } = formValues;
@@ -67,7 +67,7 @@ export class CocktailListComponent implements OnInit {
 
   public onFavoritesClick(cocktailId: number): void {
     this._favoritesService.addOrRemoveFavorite(cocktailId);
-    this._loadCocktails$.next(true);
+    this._refresh$.next(true);
   }
 
   private initializeFormControls(): void {
