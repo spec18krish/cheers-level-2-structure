@@ -1,5 +1,4 @@
-
-<div *ngIf="cocktailDetail$ | async as cocktailDetail">
+<div *ngIf="cocktailDetail$ | async as cocktailDetail; else error">
 
   <h5 class="text-center p-3">Detail page</h5>
   <div class="d-flex mb-3">
@@ -46,3 +45,9 @@
     </div>
   </div>
 </div>
+
+<ng-template #error>
+  <div *ngIf="errorMessage" class="alert alert-warning m-5">
+       <p class="text-center pt-2">{{errorMessage}}</p>
+  </div>
+</ng-template>
