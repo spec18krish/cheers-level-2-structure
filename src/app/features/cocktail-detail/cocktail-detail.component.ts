@@ -12,8 +12,7 @@ import { IsAlcoholicDirective } from '../../shared/directives/is-alcoholic.direc
   selector: 'app-cocktail-detail',
   standalone: true,
   imports: [CommonModule, IsAlcoholicDirective],
-  templateUrl: './cocktail-detail.component.html',
-  styleUrl: './cocktail-detail.component.scss'
+  templateUrl: './cocktail-detail.component.html'
 })
 export class CocktailDetailComponent implements OnInit {
 

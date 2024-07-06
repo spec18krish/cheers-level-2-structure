@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { Cocktail } from '../models/coktail.interface';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CocktailService {
-  private _apiUrl = '/cockails';
+  private _apiUrl = environment.apiUrl;
   private _http = inject(HttpClient);
 
   getCocktails(): Observable<Cocktail[]>{

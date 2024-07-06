@@ -15,7 +15,6 @@ export class IsAlcoholicDirective {
     })
   }
 
-
   private updateClassAndText(): void {
     const element = this.el.nativeElement;
     if (this.appIsAlcoholic()) {
@@ -29,17 +28,4 @@ export class IsAlcoholicDirective {
       this.renderer.setProperty(element, 'innerText', 'Non-Alcoholic');
     }
   }
-
-  private addClasses(element: ElementRef, classes: string[]): void {
-    classes.forEach(className => {
-      this.renderer.addClass(element, className);
-    });
-  }
-
-  private removeClasses(element: ElementRef, classes: string[]): void {
-    classes.forEach(className => {
-      this.renderer.removeClass(element, className);
-    });
-  }
-
 }

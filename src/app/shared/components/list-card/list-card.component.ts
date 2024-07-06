@@ -9,8 +9,7 @@ import { JoinStringPipe } from '../../pipes/join-string.pipe';
   selector: 'app-list-card',
   standalone: true,
   imports: [RouterLink, IsAlcoholicDirective, JoinStringPipe, HighlightPipe],
-  templateUrl: './list-card.component.html',
-  styleUrl: './list-card.component.scss'
+  templateUrl: './list-card.component.html'
 })
 export class ListCardComponent {
   public cocktail = input.required<Cocktail>();

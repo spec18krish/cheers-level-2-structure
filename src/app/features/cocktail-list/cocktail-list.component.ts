@@ -7,14 +7,13 @@ import { Cocktail } from '../../core/models/coktail.interface';
 import { CocktailService } from '../../core/services/cocktail.service';
 import { FavoriteService } from '../../core/services/favorite.service';
 import { ListCardComponent } from '../../shared/components/list-card/list-card.component';
-import { SortType } from './cocktail-list-sort';
+import { SortType } from './cocktail-list-sort.type';
 
 @Component({
   selector: 'app-cocktail-list',
   standalone: true,
-  imports: [CommonModule, ListCardComponent, FormsModule, ReactiveFormsModule],
-  templateUrl: './cocktail-list.component.html',
-  styleUrl: './cocktail-list.component.scss',
+  imports: [CommonModule, ListCardComponent, ReactiveFormsModule],
+  templateUrl: './cocktail-list.component.html'
 })
 export class CocktailListComponent implements OnInit {
   private _cocktailService = inject(CocktailService);

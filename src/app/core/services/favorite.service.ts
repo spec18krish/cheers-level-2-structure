@@ -2,12 +2,13 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { Cocktail } from '../models/coktail.interface';
 import { CocktailService } from './cocktail.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FavoriteService {
-  private readonly _storageKey = 'favoriteCocktails';
+  private readonly _storageKey = environment.storageKey;
   private readonly _cocktailService = inject(CocktailService);
 
   constructor() {}
