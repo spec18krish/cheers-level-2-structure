@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Observable, combineLatest, map, startWith, switchMap } from 'rxjs';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BehaviorSubject, Observable, Subject, catchError, combineLatest, map, of, startWith, switchMap } from 'rxjs';
 import { Cocktail } from '../../core/models/coktail.interface';
 import { CocktailService } from '../../core/services/cocktail.service';
 import { FavoriteService } from '../../core/services/favorite.service';
@@ -19,24 +19,28 @@ export class CocktailListComponent implements OnInit {
   private _cocktailService = inject(CocktailService);
   private _favoritesService = inject(FavoriteService);
   private _destroyRef = inject(DestroyRef);
-  public cocktails$: Observable<Cocktail[]>;
+  private _fb = inject(FormBuilder);
+
+  public cocktails$: Observable<Cocktail[] | null>;
   public filterFormGroup: FormGroup;
   public searchString$: Observable<string>;
   public showOnlyFavourites$: Observable<boolean>;
   public sort$: Observable<SortType>;
-
   public searchControl: FormControl = new FormControl('');
   public showOnlyFavouritesControl: FormControl = new FormControl(false);
-  public sort: FormControl = new FormControl('default');
+  public sortControl: FormControl = new FormControl('default');
+  public _loadCocktails$ = new BehaviorSubject<boolean>(false);
+  public errorMessage: string | null = null;
 
   public ngOnInit(): void {
     this.initializeFormControls();
+
     this.cocktails$ = combineLatest([
-      this.showOnlyFavourites$,
-      this.searchString$,
-      this.sort$
+      this.filterFormGroup.valueChanges.pipe(startWith(this.filterFormGroup.value)),
+      this._loadCocktails$
     ]).pipe(
-      switchMap(([showOnlyFavorites, search, sort]) => {
+      switchMap(([formValues, _]) => {
+        const { search, showOnlyFavourites, sort } = formValues;
         return this._cocktailService.getCocktailsByName(search).pipe(
           map((cocktails) => {
             cocktails = this.sortCocktailList(cocktails, sort);
@@ -47,10 +51,13 @@ export class CocktailListComponent implements OnInit {
             }));
 
             // filtering based on favourites or not
-            const filteredCocktails = showOnlyFavorites ?  mappedCocktails.filter(f => f.isFavorite) : mappedCocktails;
+            const filteredCocktails = showOnlyFavourites ?  mappedCocktails.filter(f => f.isFavorite) : mappedCocktails;
 
             // Sorting
             return this.sortCocktailList(filteredCocktails, sort);
+          }),
+          catchError(() => {
+            return of(null);
           })
         )
       }),
@@ -58,18 +65,17 @@ export class CocktailListComponent implements OnInit {
     );
   }
 
+  public onFavoritesClick(cocktailId: number): void {
+    this._favoritesService.addOrRemoveFavorite(cocktailId);
+    this._loadCocktails$.next(true);
+  }
+
   private initializeFormControls(): void {
-    this.searchString$ = this.searchControl.valueChanges.pipe(
-      startWith(this.searchControl.value)
-     );
-
-     this.showOnlyFavourites$ = this.showOnlyFavouritesControl.valueChanges.pipe(
-       startWith(this.showOnlyFavouritesControl.value)
-     );
-
-     this.sort$ = this.sort.valueChanges.pipe(
-      startWith(this.sort.value)
-    );
+    this.filterFormGroup = this._fb.group({
+      search: [''],
+      showOnlyFavourites: [false],
+      sort: ['default']
+    });
   }
 
   private sortCocktailList(cocktails: Cocktail[], sortType: SortType): Cocktail[]{
